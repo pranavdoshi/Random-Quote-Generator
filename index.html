@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Random Quote Generator</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <style>
+    *{margin:0;padding:0}
+    body{font-family: "OpenSans"};
+    /*----------------------- Preloader -----------------------*/
+      body.preloader-site {
+          overflow: hidden;
+      }
+
+      .preloader-wrapper {
+          height: 100%;
+          width: 100%;
+          background: #FFF;
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 9999999;
+      }
+
+      .preloader-wrapper .preloader {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+          width: 120px;
+      }
+     div{
+        font-family: 'Droid Sans', sans-serif;
+        border-left: none;
+        overflow: hidden;
+    }
+
+    .inner-block {
+        overflow: hidden;
+        border-radius: 17px;
+        margin: 20px auto;
+        color:  white;
+        width: 500px;
+        padding:50px;
+        box-shadow: 0px 5px 20px 5px rgba(0,0,0,0.75);
+    }
+    .quoteText,.author{font-size: 16px;line-height:20px;font-family: helvetica;padding:5px}
+    .block-text {
+        font-size: 19px;
+      margin-top: 13px;
+      }
+      .tweet-button {
+    display: inline-block;
+    width: 55px;
+    height: 21px;
+    line-height: 21px;
+    font-size: 13px;
+    background: #fff;
+    border-radius: 5px;
+    text-align: center;
+    cursor:pointer;
+  }
+    </style>
+  </head>
+  <body>
+    <div class="preloader-wrapper">
+      <div class="preloader">
+          <img src="http://prorabbi.website/nila/assets/images/preloader.gif" alt="NILA">
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+          <div class="center-block">
+              <div class="inner-block">
+                  <span class="fa fa-3x fa-quote-right"></span>
+                  <p class="quoteText">
+                  </p>
+                  <hr>
+                  <div>
+                      <p class="author pull-left">
+                      </p>
+                      <p class="pull-right">
+                        <button type="button" class="btn btn-primary">New Quote</button>
+                      </p>
+                  </div>
+                  <p class=""><a class="tweet-button"title="Tweet">Tweet
+                  </a>
+                  </p>
+
+              </div>
+          </div>
+      </div>
+  </div>
+    <script>
+    $(document).ready(function(){
+
+        $("body").addClass('preloader-site');
+        $(".inner-block").css("background","#fff");
+        //https://got-quotes.herokuapp.com/quotes
+        $.getJSON("https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json",function(json){
+        callback(json);
+        $('.preloader-wrapper').fadeOut();
+        $('body').removeClass('preloader-site');
+        genbgcolor();
+        });
+        $(".btn").click(function(){
+          $(".author").html("");
+          $(".quoteText").html("");
+          $.getJSON("https://cors-anywhere.herokuapp.com/http://api.forismatic.com/api/1.0/?method=getQuote&lang=en&format=json",function(json){
+          callback(json);
+          $('.preloader-wrapper').fadeOut();
+          $('body').removeClass('preloader-site');
+          genbgcolor();
+          });
+        });
+        function genbgcolor()
+        {
+          var rand = Math.floor((Math.random()*4)+0);
+          var colorArray = ["#E91E63","#9C27B0","#009688","#FF9800","#3F51B5"];
+          $(".inner-block").css("background",colorArray[rand]);
+        }
+        function callback(json)
+        {
+            $(".author").html(json.quoteAuthor);
+            var author = $(".author").text();
+            $(".quoteText").html(json.quoteText);
+            var text = $(".quoteText").text();
+            $('.tweet-button').attr("href","https://twitter.com/intent/tweet?hashtags=quotes&related=freecodecamp&text='"+text +author+"'");
+        }
+
+    })
+    </script>
+
+  </body>
+</html>
